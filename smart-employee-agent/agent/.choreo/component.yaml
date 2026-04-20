@@ -1,0 +1,10 @@
+schemaVersion: "1.2"
+endpoints:
+    - name: agent-api
+      displayName: Smart Employee Agent API
+      service:
+        basePath: /
+        port: 5001
+      type: REST
+      networkVisibilities:
+        - Public

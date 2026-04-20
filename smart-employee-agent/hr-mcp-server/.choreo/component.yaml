@@ -1,0 +1,10 @@
+schemaVersion: "1.2"
+endpoints:
+    - name: hr-mcp-api
+      displayName: HR MCP Server API
+      service:
+        basePath: /
+        port: 8000
+      type: REST
+      networkVisibilities:
+        - Public
