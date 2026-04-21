@@ -5,6 +5,6 @@ endpoints:
       service:
         basePath: /
         port: 3000
-      type: WEB
+      type: REST
       networkVisibilities:
         - Public
