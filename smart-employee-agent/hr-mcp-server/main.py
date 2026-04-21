@@ -568,20 +568,21 @@ async def reset_handler(request: StarletteRequest):
 
 # ─── Run ─────────────────────────────────────────────────────────────────────
 
+from starlette.applications import Starlette
+from starlette.routing import Mount
+from contextlib import asynccontextmanager
+
+mcp_starlette = mcp.streamable_http_app()
+
+@asynccontextmanager
+async def lifespan(app):
+    async with mcp_starlette.router.lifespan_context(app):
+        yield
+
+reset_route = Route("/reset", reset_handler, methods=["POST"])
+app = DashboardMiddleware(
+    Starlette(routes=[reset_route, Mount("/", app=mcp_starlette)], lifespan=lifespan)
+)
+
 if __name__ == "__main__":
-    from starlette.applications import Starlette
-    from starlette.routing import Mount
-    from contextlib import asynccontextmanager
-
-    mcp_starlette = mcp.streamable_http_app()
-
-    @asynccontextmanager
-    async def lifespan(app):
-        async with mcp_starlette.router.lifespan_context(app):
-            yield
-
-    reset_route = Route("/reset", reset_handler, methods=["POST"])
-    app = DashboardMiddleware(
-        Starlette(routes=[reset_route, Mount("/", app=mcp_starlette)], lifespan=lifespan)
-    )
     uvicorn.run(app, host="0.0.0.0", port=8000)
