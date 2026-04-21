@@ -20,6 +20,15 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+# Create non-root user
+RUN groupadd -r appuser && useradd -r -g appuser -u 10014 appuser
+
+# Set ownership of app directory
+RUN chown -R appuser:appuser /app
+
+# Switch to non-root user
+USER 10014
+
 EXPOSE 5001
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5001"]
